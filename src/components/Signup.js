@@ -9,7 +9,14 @@ const Signup = () => {
     username: "",
     email: "",
     password: "",
-    cPass: "",
+    confirmPassword: "",
+  });
+
+  const [formError, setFormError] = useState({
+    username: "",
+    email: "",
+    password: "",
+    confirmPassword: "",
   });
 
   const [list, setList] = useState([]);
@@ -23,12 +30,38 @@ const Signup = () => {
 
   const formSubmit = (val) => {
     val.preventDefault();
-    const newList = { ...userData, id: new Date().getTime().toString() };
+
+    //-----------------------------------------------------
+    const inputError = {
+      username: "",
+      email: "",
+      password: "",
+      confirmPassword: "",
+    };
+
+    if (userData.confirmPassword !== userData.password) {
+      setFormError({
+        ...inputError,
+        confirmPassword: "Password and confirm password should be same",
+      });
+      return;
+    }
+
+    if (!userData.password) {
+      setFormError({
+        ...inputError,
+        password: "Password should not be empty",
+      });
+      return;
+    }
+    setFormError(inputError);
+
+    //-----------------------------------------------------
+    const newList = { ...userData, };
     console.log(list);
     setList([...list, newList]);
     // console.log(list);
-
-    setUserData({ username: "", email: "", password: "", cPass: "" });
+    setUserData({ username: "", email: "", password: "", confirmPassword: "" });
     document.getElementById("error").innerHTML = "Successfully Signed Up!";
   };
   return (
@@ -42,17 +75,16 @@ const Signup = () => {
             <label htmlFor="username">Full Name</label>
             <input type="text" value={userData.username} name="username" id="username" onChange={inputValue} placeholder="......" required />
             <hr />
-
             <label htmlFor="email">Email</label>
             <input type="email" value={userData.email} name="email" id="email" onChange={inputValue} placeholder="......" required />
             <hr />
-
             <label htmlFor="password">Password</label>
             <input type="password" value={userData.password} name="password" id="password" onChange={inputValue} placeholder="......" required />
+            <p className="error-message">{formError.password}</p>
             <hr />
-
-            <label htmlFor="cPass">Confirm Password</label>
-            <input type="password" name="cPass" id="cPass" onChange={inputValue} placeholder="......" required />
+            <label htmlFor="confirmPassword">Confirm Password</label>
+            <input type="password" name="confirmPassword" id="confirmPassword" onChange={inputValue} placeholder="......" required />
+            <p className="error-message">{formError.confirmPassword}</p>
             <hr />
             <p id="error"></p>
             <button type="submit">Signup</button>

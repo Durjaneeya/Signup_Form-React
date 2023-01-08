@@ -64,4 +64,8 @@
     margin: 30px;
     color: greenyellow;
   }
+  .error-message{
+    color: red;
+    margin-top: 0.2rem;
+  }
   
